@@ -12,44 +12,101 @@ struct User
 
 };
 char MainMenu();
+bool AreEqualCharArrays(char firstArr[30], char secondArr[30]);
 int FindAccount(vector<User> users, char username[30], char password[20]);
+void SecondMenu(User user, vector<User> users);
 void Processing(vector<User> users);
 
 int main()
 {
-	vector<User> users;
+	vector<User> users = { { "Redjep","123456",1000 },
+							{ "Ivan","78954",1500 } };
+	/*cout<<users[0].username<<endl;
+	cout<<users[0].password<<endl;
+	cout<<users[0].balance<<endl;*/
+
+	Processing(users);
 
 
 }
 void SecondMenu(User user, vector<User> users)
 {
-	/*You have X BGN.Choose one of the following options :
-	C - cancel account
-		D - deposit
-		L - logout
-		T - transfer
-		W - withdraw*/
-
-	cout << "You have" << user.balance << " BGN.Choose one of the following options :";
+	cout << "You have " << user.balance << " BGN. Choose one of the following options:  " << endl;
 	cout << "C - cancel account" << endl;
-	cout << "     D - deposit" << endl;
-	cout << "     L - logout" << endl;
-	cout << "     T - transfer" << endl;
-	cout << "     W - withdraw" << endl;
+	cout << "D - deposit" << endl;
+	cout << "L - logout" << endl;
+	cout << "T - transfer" << endl;
+	cout << "W - withdraw" << endl;
 	char option;
 	cin >> option;
 	if (option == 'C')
 	{
 		char password[20];
 		cout << "Password: "; cin >> password;
-		if (user.password == password && user.balance == 0)
+		cout << endl;
+		int index = 0;
+		
+		if (AreEqualCharArrays(user.password, password) && user.balance == 0)
 		{
-			remove(users.begin(), users.end(), user);
-
+			for (size_t i = 0; i < users.size(); i++)
+			{
+				if (AreEqualCharArrays(user.username, users[i].username) &&
+					AreEqualCharArrays(user.password, users[i].password))
+				{
+					index = i; break;
+				}
+			}
+			users.erase(users.begin() + index);
 		}
+	}
+	else if (option == 'D')
+	{
+		double depositSum;
+		cout << "Amount for deposit: ";  cin >> depositSum;
+		user.balance += depositSum;
+	}
+	else if (option == 'L')
+	{
+		MainMenu();
+	}
+	else if (option == 'T')
+	{
+		char username[30];
+		char password[30];
+		double amount;
+		cout << "Enter username for transfer: ";
+		cout << "Password: "; cin >> password;
+		cout << "Amount to transfer: "; cin >> amount;
+		int accountNumber = FindAccount(users, username, password);
+		users[accountNumber].balance += amount;
+		user.balance -= amount;
+
+	}
+	else if (option == 'W')
+	{
+		double amount;
+		cout << "Amount for decreasing: ";  cin >> amount;
+		user.balance -= amount;
 	}
 
 
+
+}
+bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
+{
+	if (strlen(firstArr) != strlen(secondArr))
+	{
+		return false;
+	}
+
+	for (size_t i = 0; i < strlen(firstArr); i++)
+	{
+		if (firstArr[i] != secondArr[i])
+		{
+			return false;
+		}
+	}
+	return true;
 }
 void Processing(vector<User> users)
 {
@@ -61,8 +118,9 @@ void Processing(vector<User> users)
 		cout << "Enter Name:  "; cin >> username;
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
+		cout << endl;
 		int index = FindAccount(users, username, password);
-		SecondMenu(users[index]);
+		SecondMenu(users[index], users);
 
 
 	}
@@ -71,6 +129,7 @@ void Processing(vector<User> users)
 		cout << "Enter Name:  "; cin >> username;
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
+		cout << endl;
 	}
 	else
 	{
@@ -81,7 +140,8 @@ int FindAccount(vector<User> users, char username[30], char password[20])
 {
 	for (int i = 0; i < size(users); i++)
 	{
-		if (users[i].username == username && users[i].password == password)
+		if (AreEqualCharArrays(users[i].username, username)
+			&& AreEqualCharArrays(users[i].password, password))
 		{
 			return i;
 		}

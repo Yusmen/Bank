@@ -1,2 +1,3 @@
 ﻿  BankSoftware.cpp
-  BankSoftware.vcxproj -> C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank-Software-Project\Project\BankSoftware\Debug\BankSoftware.exe
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(141,20): warning C4018: '<': signed/unsigned mismatch
+  BankSoftware.vcxproj -> C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\Debug\BankSoftware.exe
