@@ -14,8 +14,8 @@ char MainMenu();
 void Processing();
 int main()
 {
+	
 
-	Processing();
 }
 void Processing()
 {
