@@ -15,7 +15,7 @@ void Processing();
 int main()
 {
 	
-
+	Processing();
 }
 void Processing()
 {
