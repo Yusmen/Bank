@@ -13,25 +13,28 @@ struct User
 };
 char MainMenu();
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30]);
-int FindAccount(vector<User> users, char username[30], char password[20]);
-void SecondMenu(User user, vector<User> users);
-void Processing(vector<User> users);
+int FindAccount(vector<User>& users, char username[30], char password[20]);
+void SecondMenu(int numberOfUser, vector<User>& users);
+void Processing(vector<User>& users);
 
 int main()
 {
 	vector<User> users = { { "Redjep","123456",1000 },
 							{ "Ivan","78954",1500 } };
-	/*cout<<users[0].username<<endl;
-	cout<<users[0].password<<endl;
-	cout<<users[0].balance<<endl;*/
+	
 
 	Processing(users);
-
+	//cout << users[0].username << endl;
+	//cout << users[0].password << endl;
+	//cout << users[0].balance << endl;
+	//cout << users[1].username << endl;
+	//cout << users[1].password << endl;
+	//cout << users[1].balance << endl;
 
 }
-void SecondMenu(User user, vector<User> users)
+void SecondMenu(int numberOfUser, vector<User>& users)
 {
-	cout << "You have " << user.balance << " BGN. Choose one of the following options:  " << endl;
+	cout << "You have " << users[numberOfUser].balance << " BGN. Choose one of the following options:  " << endl;
 	cout << "C - cancel account" << endl;
 	cout << "D - deposit" << endl;
 	cout << "L - logout" << endl;
@@ -46,24 +49,16 @@ void SecondMenu(User user, vector<User> users)
 		cout << endl;
 		int index = 0;
 		
-		if (AreEqualCharArrays(user.password, password) && user.balance == 0)
+		if (AreEqualCharArrays(users[numberOfUser].password, password) && users[numberOfUser].balance == 0)
 		{
-			for (size_t i = 0; i < users.size(); i++)
-			{
-				if (AreEqualCharArrays(user.username, users[i].username) &&
-					AreEqualCharArrays(user.password, users[i].password))
-				{
-					index = i; break;
-				}
-			}
-			users.erase(users.begin() + index);
+			users.erase(users.begin() + numberOfUser);
 		}
 	}
 	else if (option == 'D')
 	{
 		double depositSum;
 		cout << "Amount for deposit: ";  cin >> depositSum;
-		user.balance += depositSum;
+		users[numberOfUser].balance += depositSum;
 	}
 	else if (option == 'L')
 	{
@@ -79,17 +74,17 @@ void SecondMenu(User user, vector<User> users)
 		cout << "Amount to transfer: "; cin >> amount;
 		int accountNumber = FindAccount(users, username, password);
 		users[accountNumber].balance += amount;
-		user.balance -= amount;
+		users[numberOfUser].balance -= amount;
 
 	}
 	else if (option == 'W')
 	{
 		double amount;
 		cout << "Amount for decreasing: ";  cin >> amount;
-		user.balance -= amount;
+		users[numberOfUser].balance -= amount;
 	}
 
-
+	
 
 }
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
@@ -108,7 +103,7 @@ bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
 	}
 	return true;
 }
-void Processing(vector<User> users)
+void Processing(vector<User>& users)
 {
 	char username[30];
 	char password[20];
@@ -120,7 +115,7 @@ void Processing(vector<User> users)
 		cout << "Enter Password:  "; cin >> password;
 		cout << endl;
 		int index = FindAccount(users, username, password);
-		SecondMenu(users[index], users);
+		SecondMenu(index, users);
 
 
 	}
@@ -136,7 +131,7 @@ void Processing(vector<User> users)
 		exit(0);
 	}
 }
-int FindAccount(vector<User> users, char username[30], char password[20])
+int FindAccount(vector<User>& users, char username[30], char password[20])
 {
 	for (int i = 0; i < size(users); i++)
 	{
