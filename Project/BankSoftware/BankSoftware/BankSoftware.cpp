@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <cstdlib>
 #include <vector>
@@ -6,31 +7,49 @@ using namespace std;
 
 struct User
 {
-	char username[30];
-	char password[20];
+	char username[30]="";
+	char password[20]="";
 	double balance;
 
 };
 char MainMenu();
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30]);
+void Copy(char firstArr[30], char secondArr[30]);
 int FindAccount(vector<User>& users, char username[30], char password[20]);
 void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
-
+vector<User> ReadFromFile();
 int main()
 {
 	vector<User> users = { { "Redjep","123456",1000 },
 							{ "Ivan","78954",1500 } };
 	
+	//Processing(users);
+	ReadFromFile();
+}
+vector<User> ReadFromFile()
+{
+	vector<User> users;
 
-	Processing(users);
-	//cout << users[0].username << endl;
-	//cout << users[0].password << endl;
-	//cout << users[0].balance << endl;
-	//cout << users[1].username << endl;
-	//cout << users[1].password << endl;
-	//cout << users[1].balance << endl;
+	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
+	ifstream File(filename);
+
+
+	const int String_Size = 100;
+	char user[50];
+	while (!File.eof())
+	{
+	
+		File >> user;
+		cout << user<<endl;
+	
+	}
+
+	File.close();
+	return users;
+
+	
 }
 void SecondMenu(int numberOfUser, vector<User>& users)
 {
@@ -105,11 +124,13 @@ bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
 }
 void Processing(vector<User>& users)
 {
-	char username[30];
-	char password[20];
+	
 	char option = MainMenu();
+	
 	if (option == 'L')
 	{
+		char username[30];
+		char password[20];
 		cout << "Enter Name:  "; cin >> username;
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
@@ -121,14 +142,30 @@ void Processing(vector<User>& users)
 	}
 	else if (option == 'R')
 	{
+		char username[30];
+		char password[20];
 		cout << "Enter Name:  "; cin >> username;
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
-		cout << endl;
+		cout << endl;		
+		User user;
+		user.balance = 0;
+		Copy(username, user.username);
+		Copy(password, user.password);
+		users.push_back(user);
+		int index = FindAccount(users, username, password);
+		SecondMenu(index, users);
 	}
 	else
 	{
 		exit(0);
+	}
+}
+void Copy(char firstArr[30], char secondArr[30])
+{
+	for (size_t i = 0; i < strlen(firstArr); i++)
+	{
+		secondArr[i] = firstArr[i];
 	}
 }
 int FindAccount(vector<User>& users, char username[30], char password[20])
