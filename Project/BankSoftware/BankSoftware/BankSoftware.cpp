@@ -3,12 +3,15 @@
 #include <iomanip>
 #include <cstdlib>
 #include <vector>
+#include <string>
+#include <stdlib.h>
+
 using namespace std;
 
 struct User
 {
-	char username[30]="";
-	char password[20]="";
+	char username[30] = "";
+	char password[20] = "";
 	double balance;
 
 };
@@ -19,13 +22,32 @@ int FindAccount(vector<User>& users, char username[30], char password[20]);
 void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
 vector<User> ReadFromFile();
+void RecordInFile(vector<User> users);
 int main()
 {
-	vector<User> users = { { "Redjep","123456",1000 },
-							{ "Ivan","78954",1500 } };
-	
-	//Processing(users);
-	ReadFromFile();
+	vector<User> users = ReadFromFile();
+
+	Processing(users);
+	RecordInFile(users);
+
+	//string number = "25";
+	//char arr[20] = "poiee";
+	//string name = "Ikpow";
+	//name = arr;
+	//cout << name;
+	////cout << name[0];
+
+}
+void RecordInFile(vector<User> users)
+{
+	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
+
+	ofstream File(filename);
+	for (int i = 0; i < users.size(); i++)
+	{
+		File << users[i].username << ':' << users[i].password << ':' << users[i].balance << endl;
+	}
+	File.close();
 }
 vector<User> ReadFromFile()
 {
@@ -34,23 +56,55 @@ vector<User> ReadFromFile()
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
 	ifstream File(filename);
+	char userLine[30];
 
-
-	const int String_Size = 100;
-	char user[50];
 	while (!File.eof())
 	{
-	
-		File >> user;
-		cout << user<<endl;
-	
+		char username[30] = "";
+		char password[20] = "";
+		char balance[20] = "";
+
+		File >> userLine;
+		int i = 0;
+		while (userLine[i] != ':')
+		{
+			username[i] = userLine[i];
+			i++;
+		}
+		int k = 0;
+		while (userLine[i + 1] != ':')
+		{
+			password[k++] = userLine[i + 1];
+			i++;
+		}
+		k = 0;
+		while (userLine[i + 2] != '\0')
+		{
+			balance[k++] = userLine[i + 2];
+			i++;
+		}
+		string stringBalance = balance;
+
+		User user;
+		Copy(username, user.username);
+		Copy(password, user.password);
+		double numberBalance = atof(stringBalance.c_str());
+		user.balance = numberBalance;
+		//cout << username << endl;
+		//cout << password<<endl;
+		//cout << numberBalance<<endl;
+		//cout << userLine << endl;
+		//cout << endl;
+		users.push_back(user);
+
 	}
 
 	File.close();
 	return users;
 
-	
+
 }
+
 void SecondMenu(int numberOfUser, vector<User>& users)
 {
 	cout << "You have " << users[numberOfUser].balance << " BGN. Choose one of the following options:  " << endl;
@@ -67,7 +121,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 		cout << "Password: "; cin >> password;
 		cout << endl;
 		int index = 0;
-		
+
 		if (AreEqualCharArrays(users[numberOfUser].password, password) && users[numberOfUser].balance == 0)
 		{
 			users.erase(users.begin() + numberOfUser);
@@ -103,7 +157,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 		users[numberOfUser].balance -= amount;
 	}
 
-	
+
 
 }
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
@@ -124,9 +178,9 @@ bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
 }
 void Processing(vector<User>& users)
 {
-	
+
 	char option = MainMenu();
-	
+
 	if (option == 'L')
 	{
 		char username[30];
@@ -147,7 +201,7 @@ void Processing(vector<User>& users)
 		cout << "Enter Name:  "; cin >> username;
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
-		cout << endl;		
+		cout << endl;
 		User user;
 		user.balance = 0;
 		Copy(username, user.username);
@@ -156,7 +210,7 @@ void Processing(vector<User>& users)
 		int index = FindAccount(users, username, password);
 		SecondMenu(index, users);
 	}
-	else
+	else if (option == 'Q')
 	{
 		exit(0);
 	}
