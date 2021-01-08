@@ -18,6 +18,8 @@ struct User
 char MainMenu();
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30]);
 void Copy(char firstArr[30], char secondArr[30]);
+bool isUsernameValid(char username[30]);
+bool isValidPassword(char password[30]);
 int FindAccount(vector<User>& users, char username[30], char password[20]);
 void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
@@ -107,6 +109,7 @@ vector<User> ReadFromFile()
 
 void SecondMenu(int numberOfUser, vector<User>& users)
 {
+
 	cout << "You have " << users[numberOfUser].balance << " BGN. Choose one of the following options:  " << endl;
 	cout << "C - cancel account" << endl;
 	cout << "D - deposit" << endl;
@@ -115,6 +118,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 	cout << "W - withdraw" << endl;
 	char option;
 	cin >> option;
+	double overdraft = -10000;
 	if (option == 'C')
 	{
 		char password[20];
@@ -131,6 +135,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 	{
 		double depositSum;
 		cout << "Amount for deposit: ";  cin >> depositSum;
+		ceil(depositSum);
 		users[numberOfUser].balance += depositSum;
 	}
 	else if (option == 'L')
@@ -145,6 +150,10 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 		cout << "Enter username for transfer: ";
 		cout << "Password: "; cin >> password;
 		cout << "Amount to transfer: "; cin >> amount;
+		if (users[numberOfUser].balance - amount < overdraft)
+		{
+			cout << "You cannot transfer! You have overdraft 10 000 BGN" << endl;
+		}
 		int accountNumber = FindAccount(users, username, password);
 		users[accountNumber].balance += amount;
 		users[numberOfUser].balance -= amount;
@@ -153,8 +162,16 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 	else if (option == 'W')
 	{
 		double amount;
-		cout << "Amount for decreasing: ";  cin >> amount;
-		users[numberOfUser].balance -= amount;
+		cout << "Amount for withdraw: ";  cin >> amount;
+		if (users[numberOfUser].balance - amount < overdraft)
+		{
+			cout << "You have overdraft 10 000 BGN" << endl;
+		}
+		else
+		{
+			users[numberOfUser].balance -= amount;
+		}
+
 	}
 
 
@@ -199,9 +216,26 @@ void Processing(vector<User>& users)
 		char username[30];
 		char password[20];
 		cout << "Enter Name:  "; cin >> username;
+		while (!isUsernameValid)
+		{
+			cout << "Username cannot contain digits!";
+			cout << "Enter Name:  "; cin >> username;
+		}
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
 		cout << endl;
+		while (!isValidPassword(password))
+		{
+			cout << "Invalid Password!" << endl;
+			cout << "Enter Password:  "; cin >> password;
+		}
+		char passwordToConfirm[20];
+		cout << "Confirm Password: "; cin >> passwordToConfirm;
+		while (!AreEqualCharArrays(password, passwordToConfirm))
+		{
+			cout << "Wrong password!" << endl;
+			cout << "Confirm Password: "; cin >> passwordToConfirm;
+		}
 		User user;
 		user.balance = 0;
 		Copy(username, user.username);
@@ -214,6 +248,71 @@ void Processing(vector<User>& users)
 	{
 		exit(0);
 	}
+}
+bool isUsernameValid(char username[30])
+{
+	for (int i = 0; i < strlen(username); i++)
+	{
+		if (username[i] >= '1' && username[i] <= '9')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+bool isValidPassword(char password[30])
+{
+	bool containsAtleastOneSmallLetter = false;
+	bool containsAtleastOneBigLetter = false;
+	bool containsAtleastOneSymbol = false;
+	bool containingOtherSymbols = false;
+	if (strlen(password) < 5)
+	{
+		return false;
+	}
+	for (int i = 0; i < strlen(password); i++)
+	{
+		if (password[i] >= 'a' && password[i] <= 'z')
+		{
+			containsAtleastOneSmallLetter = true;
+		}
+	}
+	for (int i = 0; i < strlen(password); i++)
+	{
+		if (password[i] >= 'A' && password[i] <= 'Z')
+		{
+			containsAtleastOneBigLetter = true;
+		}
+	}
+	for (int i = 0; i < strlen(password); i++)
+	{
+		//!@#$%^&*
+		if (password[i] == '!' || password[i] == '@' ||
+			password[i] == '#' || password[i] == '$' || password[i] == '%' ||
+			password[i] == '^' || password[i] == '&' || password[i] == '*')
+		{
+			containsAtleastOneSymbol = true;
+		}
+	}
+	for (int i = 0; i < strlen(password); i++)
+	{
+		if ((password[i] < 'a' || password[i] > 'z')
+			&& (password[i] < 'A' || password[i] > 'Z') && password[i] != '!' && password[i] != '@' &&
+			password[i] != '#' && password[i] != '$' && password[i] != '%' &&
+			password[i] != '^' && password[i] != '&' && password[i] != '*')
+		{
+			containingOtherSymbols = true;
+		}
+	}
+	if (containsAtleastOneBigLetter &&
+		containsAtleastOneSmallLetter &&
+		containsAtleastOneSymbol &&
+		!containingOtherSymbols)
+	{
+		return true;
+
+	}
+	return false;
 }
 void Copy(char firstArr[30], char secondArr[30])
 {

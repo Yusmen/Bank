@@ -1,4 +1,4 @@
 ﻿  BankSoftware.cpp
 C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(46,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(227,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(234,20): warning C4018: '<': signed/unsigned mismatch
   BankSoftware.vcxproj -> C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\Debug\BankSoftware.exe
