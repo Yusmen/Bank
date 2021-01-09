@@ -1,10 +1,12 @@
 ﻿  BankSoftware.cpp
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(71,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(247,26): warning C4551: function call missing argument list
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(282,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(301,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(309,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(317,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(328,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(358,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(70,26): warning C4551: function call missing argument list
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(144,8): warning C4101: 'username': unreferenced local variable
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(225,28): warning C4244: 'initializing': conversion from 'double' to '__int64', possible loss of data
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(249,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(296,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(315,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(323,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(331,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(342,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(372,20): warning C4018: '<': signed/unsigned mismatch
   BankSoftware.vcxproj -> C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\Debug\BankSoftware.exe

@@ -11,30 +11,30 @@ using namespace std;
 struct User
 {
 	char username[30] = "";
-	char password[20] = "";
+	long long password;
 	double balance;
-
 };
 char MainMenu();
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30]);
 void Copy(char firstArr[30], char secondArr[30]);
 bool isUsernameValid(char username[30]);
 bool isValidPassword(char password[30]);
+void RecordInFile(vector<User> users);
 int FindAccount(vector<User>& users, char username[30], char password[20]);
 void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
 vector<User> ReadFromFile();
-void RecordInFile(vector<User> users);
-int HashPassword(char password[30]);
+
+long long HashPassword(char password[30]);
 int main()
 {
-	//vector<User> users = ReadFromFile();
+	vector<User> users = ReadFromFile();
 
-	//Processing(users);
+	Processing(users);
 	//RecordInFile(users);
-	char str[100] = "1*As1234niohiouhil;knjhgoipwi9uh";
+	//char str[10] = "a";
 
-	cout << HashPassword(str);
+	//cout << HashPassword(str);
 
 	//string number = "25";
 	//char arr[20] = "poiee";
@@ -44,35 +44,153 @@ int main()
 	////cout << name[0];
 
 }
-int HashPassword(char password[30])
+void Processing(vector<User>& users)
 {
-	//unsigned hashedNumber = 0;
-	//for (int i = 0; i < strlen(password); i++)
-	//{
-	//	hashedNumber = hashedNumber * 256u + (unsigned)password[i];
-	//}
-	//return hashedNumber;
 
-	const int Base = 257;
-	const int MOD = 1000000007;
-	int ret = 1;
-	for (int i = 0; i < (int)strlen(password); i++)
+	char option = MainMenu();
+
+	if (option == 'L')
 	{
-		ret = ((long long)ret * Base + password[i]) % MOD;
-	}
-	return ret;
+		char username[30];
+		char password[20];
+		cout << "Enter Name:  "; cin >> username;
+		cout << endl;
+		cout << "Enter Password:  "; cin >> password;
+		cout << endl;
+		int index = FindAccount(users, username, password);
+		if (index == -1)
+		{
+			while (index == -1)
+			{
+				cout << "Account not found!" << endl;
+				cout << "Enter Name:  "; cin >> username;
+				cout << endl;
+				cout << "Enter Password:  "; cin >> password;
+				cout << endl;
+				index = FindAccount(users, username, password);
+			}
+		    
+		}
+		SecondMenu(index, users);
 
+
+	}
+	else if (option == 'R')
+	{
+		char username[30];
+		char password[20];
+		cout << "Enter Name:  "; cin >> username;
+		while (!isUsernameValid)
+		{
+			cout << "Username cannot contain digits!";
+			cout << "Enter Name:  "; cin >> username;
+		}
+		cout << endl;
+		cout << "Enter Password:  "; cin >> password;
+		cout << endl;
+		while (!isValidPassword(password))
+		{
+			cout << "Invalid Password!" << endl;
+			cout << "Enter Password:  "; cin >> password;
+		}
+		char passwordToConfirm[20];
+		cout << "Confirm Password: "; cin >> passwordToConfirm;
+		while (!AreEqualCharArrays(password, passwordToConfirm))
+		{
+			cout << "Wrong password!" << endl;
+			cout << "Confirm Password: "; cin >> passwordToConfirm;
+		}
+		User user;
+		user.balance = 0;
+		Copy(username, user.username);
+		user.password = HashPassword(password);
+		users.push_back(user);
+		int index = FindAccount(users, username, password);
+		SecondMenu(index, users);
+	}
+	else if (option == 'Q')
+	{
+		RecordInFile(users);
+		exit(0);
+
+	}
 }
-void RecordInFile(vector<User> users)
+void SecondMenu(int numberOfUser, vector<User>& users)
 {
-	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
-	ofstream File(filename);
-	for (int i = 0; i < users.size(); i++)
+	cout << "You have " << users[numberOfUser].balance << " BGN. Choose one of the following options:  " << endl;
+	cout << endl;
+	cout << "C - cancel account" << endl;
+	cout << "D - deposit" << endl;
+	cout << "L - logout" << endl;
+	cout << "T - transfer" << endl;
+	cout << "W - withdraw" << endl;
+	char option;
+	cin >> option;
+	double overdraft = -10000;
+	if (option == 'C')
 	{
-		File << users[i].username << ':' << users[i].password << ':' << users[i].balance << endl;
+		char password[20];
+		cout << "Password: "; cin >> password;
+		cout << endl;
+		int index = 0;
+
+		if ((users[numberOfUser].password, HashPassword(password)) && users[numberOfUser].balance == 0)
+		{
+			users.erase(users.begin() + numberOfUser);
+		}
 	}
-	File.close();
+	else if (option == 'D')
+	{
+		double depositSum;
+		cout << "Amount for deposit: ";  cin >> depositSum;
+		depositSum = ceil(depositSum * 100.00) / 100.00;
+		users[numberOfUser].balance += depositSum;
+		SecondMenu(numberOfUser, users);
+	}
+	else if (option == 'L')
+	{
+		MainMenu();
+	}
+	else if (option == 'T')
+	{
+		char username[30];
+		char usernameToTransfer[30];
+		char password[30];
+		double amount;
+		cout << "Enter username for transfer: "; cin >> usernameToTransfer;
+		cout << "Password: "; cin >> password;
+		cout << "Amount to transfer: "; cin >> amount;
+		amount = ceil(amount * 100.00) / 100.00;
+		if (users[numberOfUser].balance - amount < overdraft)
+		{
+			cout << "You cannot transfer! You have overdraft 10 000 BGN" << endl;
+		}
+		int accountNumber = FindAccount(users, usernameToTransfer, password);
+		users[accountNumber].balance += amount;
+		users[numberOfUser].balance -= amount;
+		SecondMenu(numberOfUser, users);
+
+	}
+	else if (option == 'W')
+	{
+		double amount;
+		cout << "Amount for withdraw: ";  cin >> amount;
+		amount = ceil(amount * 100.00) / 100.00;
+		if (users[numberOfUser].balance - amount < overdraft)
+		{
+			cout << "You have overdraft 10 000 BGN" << endl;
+		}
+		else
+		{
+			users[numberOfUser].balance -= amount;
+		}
+		SecondMenu(numberOfUser, users);
+
+	}
+
+
+
 }
 vector<User> ReadFromFile()
 {
@@ -114,10 +232,12 @@ vector<User> ReadFromFile()
 			i++;
 		}
 		string stringBalance = balance;
+		string stringPassword = password;
 
 		User user;
+		long long hashedPassword = atof(stringPassword.c_str());
 		Copy(username, user.username);
-		Copy(password, user.password);
+		user.password = hashedPassword;
 		double numberBalance = atof(stringBalance.c_str());
 		user.balance = numberBalance;
 		//cout << username << endl;
@@ -134,77 +254,39 @@ vector<User> ReadFromFile()
 
 
 }
-
-void SecondMenu(int numberOfUser, vector<User>& users)
+void RecordInFile(vector<User> users)
 {
+	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
-	cout << "You have " << users[numberOfUser].balance << " BGN. Choose one of the following options:  " << endl;
-	cout << "C - cancel account" << endl;
-	cout << "D - deposit" << endl;
-	cout << "L - logout" << endl;
-	cout << "T - transfer" << endl;
-	cout << "W - withdraw" << endl;
-	char option;
-	cin >> option;
-	double overdraft = -10000;
-	if (option == 'C')
+	ofstream File(filename);
+	for (int i = 0; i < users.size(); i++)
 	{
-		char password[20];
-		cout << "Password: "; cin >> password;
-		cout << endl;
-		int index = 0;
-
-		if (AreEqualCharArrays(users[numberOfUser].password, password) && users[numberOfUser].balance == 0)
-		{
-			users.erase(users.begin() + numberOfUser);
-		}
+		File << users[i].username << ':' << users[i].password << ':' << users[i].balance << endl;
 	}
-	else if (option == 'D')
+	File.close();
+}
+long long HashPassword(char password[30])
+{
+	//unsigned hashedNumber = 0;
+	//for (int i = 0; i < strlen(password); i++)
+	//{
+	//	hashedNumber = hashedNumber * 256u + (unsigned)password[i];
+	//}
+	//return hashedNumber;
+
+	const int Base = 257;
+	const int MOD = 1000000007;
+	long long ret = 1;
+	for (size_t i = 0; i < strlen(password); i++)
 	{
-		double depositSum;
-		cout << "Amount for deposit: ";  cin >> depositSum;
-		ceil(depositSum);
-		users[numberOfUser].balance += depositSum;
+		ret = ((long long)ret * Base + password[i]) % MOD;
 	}
-	else if (option == 'L')
-	{
-		MainMenu();
-	}
-	else if (option == 'T')
-	{
-		char username[30];
-		char password[30];
-		double amount;
-		cout << "Enter username for transfer: ";
-		cout << "Password: "; cin >> password;
-		cout << "Amount to transfer: "; cin >> amount;
-		if (users[numberOfUser].balance - amount < overdraft)
-		{
-			cout << "You cannot transfer! You have overdraft 10 000 BGN" << endl;
-		}
-		int accountNumber = FindAccount(users, username, password);
-		users[accountNumber].balance += amount;
-		users[numberOfUser].balance -= amount;
-
-	}
-	else if (option == 'W')
-	{
-		double amount;
-		cout << "Amount for withdraw: ";  cin >> amount;
-		if (users[numberOfUser].balance - amount < overdraft)
-		{
-			cout << "You have overdraft 10 000 BGN" << endl;
-		}
-		else
-		{
-			users[numberOfUser].balance -= amount;
-		}
-
-	}
-
-
+	return ret;
 
 }
+
+
+
 bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
 {
 	if (strlen(firstArr) != strlen(secondArr))
@@ -221,62 +303,7 @@ bool AreEqualCharArrays(char firstArr[30], char secondArr[30])
 	}
 	return true;
 }
-void Processing(vector<User>& users)
-{
 
-	char option = MainMenu();
-
-	if (option == 'L')
-	{
-		char username[30];
-		char password[20];
-		cout << "Enter Name:  "; cin >> username;
-		cout << endl;
-		cout << "Enter Password:  "; cin >> password;
-		cout << endl;
-		int index = FindAccount(users, username, password);
-		SecondMenu(index, users);
-
-
-	}
-	else if (option == 'R')
-	{
-		char username[30];
-		char password[20];
-		cout << "Enter Name:  "; cin >> username;
-		while (!isUsernameValid)
-		{
-			cout << "Username cannot contain digits!";
-			cout << "Enter Name:  "; cin >> username;
-		}
-		cout << endl;
-		cout << "Enter Password:  "; cin >> password;
-		cout << endl;
-		while (!isValidPassword(password))
-		{
-			cout << "Invalid Password!" << endl;
-			cout << "Enter Password:  "; cin >> password;
-		}
-		char passwordToConfirm[20];
-		cout << "Confirm Password: "; cin >> passwordToConfirm;
-		while (!AreEqualCharArrays(password, passwordToConfirm))
-		{
-			cout << "Wrong password!" << endl;
-			cout << "Confirm Password: "; cin >> passwordToConfirm;
-		}
-		User user;
-		user.balance = 0;
-		Copy(username, user.username);
-		Copy(password, user.password);
-		users.push_back(user);
-		int index = FindAccount(users, username, password);
-		SecondMenu(index, users);
-	}
-	else if (option == 'Q')
-	{
-		exit(0);
-	}
-}
 bool isUsernameValid(char username[30])
 {
 	for (int i = 0; i < strlen(username); i++)
@@ -358,7 +385,7 @@ int FindAccount(vector<User>& users, char username[30], char password[20])
 	for (int i = 0; i < size(users); i++)
 	{
 		if (AreEqualCharArrays(users[i].username, username)
-			&& AreEqualCharArrays(users[i].password, password))
+			&& (users[i].password == HashPassword(password)))
 		{
 			return i;
 		}
@@ -370,11 +397,10 @@ char MainMenu()
 {
 	char input;
 	cout << endl;
-	cout << "     Choose one of the options:   " << endl;
+	cout << "Choose one of the options:" << endl;
 	cout << endl;
 	cout << endl;
-	cout << "L for login" << "    " << "R for register" << "    ." << "Q for quit";
-	cout << endl;
+	cout << "L for login" << "    " << "R for register" << "     " << "Q for quit" << endl;
 	cin >> input;
 	cout << endl;
 	cout << endl;
