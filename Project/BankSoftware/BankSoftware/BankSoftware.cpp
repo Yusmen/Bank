@@ -25,12 +25,16 @@ void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
 vector<User> ReadFromFile();
 void RecordInFile(vector<User> users);
+int HashPassword(char password[30]);
 int main()
 {
-	vector<User> users = ReadFromFile();
+	//vector<User> users = ReadFromFile();
 
-	Processing(users);
-	RecordInFile(users);
+	//Processing(users);
+	//RecordInFile(users);
+	char str[100] = "1*As1234niohiouhil;knjhgoipwi9uh";
+
+	cout << HashPassword(str);
 
 	//string number = "25";
 	//char arr[20] = "poiee";
@@ -38,6 +42,25 @@ int main()
 	//name = arr;
 	//cout << name;
 	////cout << name[0];
+
+}
+int HashPassword(char password[30])
+{
+	//unsigned hashedNumber = 0;
+	//for (int i = 0; i < strlen(password); i++)
+	//{
+	//	hashedNumber = hashedNumber * 256u + (unsigned)password[i];
+	//}
+	//return hashedNumber;
+
+	const int Base = 257;
+	const int MOD = 1000000007;
+	int ret = 1;
+	for (int i = 0; i < (int)strlen(password); i++)
+	{
+		ret = ((long long)ret * Base + password[i]) % MOD;
+	}
+	return ret;
 
 }
 void RecordInFile(vector<User> users)
@@ -62,11 +85,16 @@ vector<User> ReadFromFile()
 
 	while (!File.eof())
 	{
+
 		char username[30] = "";
 		char password[20] = "";
 		char balance[20] = "";
 
 		File >> userLine;
+		if (File.eof())
+		{
+			break;
+		}
 		int i = 0;
 		while (userLine[i] != ':')
 		{
@@ -275,6 +303,7 @@ bool isValidPassword(char password[30])
 		if (password[i] >= 'a' && password[i] <= 'z')
 		{
 			containsAtleastOneSmallLetter = true;
+			break;
 		}
 	}
 	for (int i = 0; i < strlen(password); i++)
@@ -282,6 +311,7 @@ bool isValidPassword(char password[30])
 		if (password[i] >= 'A' && password[i] <= 'Z')
 		{
 			containsAtleastOneBigLetter = true;
+			break;
 		}
 	}
 	for (int i = 0; i < strlen(password); i++)
@@ -292,6 +322,7 @@ bool isValidPassword(char password[30])
 			password[i] == '^' || password[i] == '&' || password[i] == '*')
 		{
 			containsAtleastOneSymbol = true;
+			break;
 		}
 	}
 	for (int i = 0; i < strlen(password); i++)
@@ -299,9 +330,10 @@ bool isValidPassword(char password[30])
 		if ((password[i] < 'a' || password[i] > 'z')
 			&& (password[i] < 'A' || password[i] > 'Z') && password[i] != '!' && password[i] != '@' &&
 			password[i] != '#' && password[i] != '$' && password[i] != '%' &&
-			password[i] != '^' && password[i] != '&' && password[i] != '*')
+			password[i] != '^' && password[i] != '&' && password[i] != '*' && (password[i] < '1' || password[i]>'9'))
 		{
 			containingOtherSymbols = true;
+			break;
 		}
 	}
 	if (containsAtleastOneBigLetter &&
