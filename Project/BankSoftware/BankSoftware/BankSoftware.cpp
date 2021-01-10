@@ -1,7 +1,21 @@
-﻿#include <iostream>
+﻿/**
+*
+* Solution to course project # 3
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2020/2021
+*
+* @author Yusmen Zabanov
+* @idnumber 62556
+* @compiler VC
+*
+* <file with all functions>
+*
+*/
+
+#include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <cstdlib>
 #include <vector>
 #include <string>
 #include <stdlib.h>
@@ -65,7 +79,7 @@ void Processing(vector<User>& users)
 		char username[Max_Length];
 		char password[Max_Length];
 		cout << "Enter Name: "; cin >> username;
-		while (!isUsernameValid)
+		while (!isUsernameValid(username))
 		{
 			cout << "Username cannot contain digits!";
 			cout << "Enter Name: "; cin >> username;
@@ -146,7 +160,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 	}
 	else if (option == "T")
 	{
-		char username[Max_Length];
+		
 		char usernameToTransfer[Max_Length];
 		char password[Max_Length];
 		double amount;
@@ -199,6 +213,11 @@ vector<User> ReadFromFile()
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
 	ifstream File(filename);
+	if (!File.is_open())
+	{
+		cout << "Cannot open file users.txt";
+		exit(0);
+	}
 	char userLine[100];
 
 	while (!File.eof())
@@ -259,7 +278,7 @@ void RecordInFile(vector<User> users)
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
 	ofstream File(filename);
-	for (int i = 0; i < users.size(); i++)
+	for (int i = 0; i < (int)users.size(); i++)
 	{
 		File << users[i].username << ':' << users[i].password << ':' << users[i].balance << endl;
 	}
@@ -300,7 +319,7 @@ bool AreEqualCharArrays(char firstArr[Max_Length], char secondArr[Max_Length])
 
 bool isUsernameValid(char username[Max_Length])
 {
-	for (int i = 0; i < strlen(username); i++)
+	for (int i = 0; i < (int)strlen(username); i++)
 	{
 		if (username[i] >= '1' && username[i] <= '9')
 		{
@@ -319,7 +338,7 @@ bool isValidPassword(char password[Max_Length])
 	{
 		return false;
 	}
-	for (int i = 0; i < strlen(password); i++)
+	for (int i = 0; i < (int)strlen(password); i++)
 	{
 		if (password[i] >= 'a' && password[i] <= 'z')
 		{
@@ -327,7 +346,7 @@ bool isValidPassword(char password[Max_Length])
 			break;
 		}
 	}
-	for (int i = 0; i < strlen(password); i++)
+	for (int i = 0; i < (int)strlen(password); i++)
 	{
 		if (password[i] >= 'A' && password[i] <= 'Z')
 		{
@@ -335,7 +354,7 @@ bool isValidPassword(char password[Max_Length])
 			break;
 		}
 	}
-	for (int i = 0; i < strlen(password); i++)
+	for (int i = 0; i < (int)strlen(password); i++)
 	{
 		
 		if (password[i] == '!' || password[i] == '@' ||
@@ -346,7 +365,7 @@ bool isValidPassword(char password[Max_Length])
 			break;
 		}
 	}
-	for (int i = 0; i < strlen(password); i++)
+	for (int i = 0; i < (int)strlen(password); i++)
 	{
 		if ((password[i] < 'a' || password[i] > 'z')
 			&& (password[i] < 'A' || password[i] > 'Z') && password[i] != '!' && password[i] != '@' &&
@@ -376,7 +395,7 @@ void Copy(char firstArr[Max_Length], char secondArr[Max_Length])
 }
 int FindAccount(vector<User>& users, char username[Max_Length], char password[Max_Length])
 {
-	for (int i = 0; i < size(users); i++)
+	for (int i = 0; i < (int)size(users); i++)
 	{
 		if (AreEqualCharArrays(users[i].username, username)
 			&& (users[i].password == HashPassword(password)))
