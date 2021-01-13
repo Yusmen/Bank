@@ -33,15 +33,16 @@ bool AreEqualCharArrays(char firstArr[Max_Length], char secondArr[Max_Length]);
 void Copy(char firstArr[Max_Length], char secondArr[Max_Length]);
 bool isUsernameValid(char username[Max_Length]);
 bool isValidPassword(char password[Max_Length]);
-void RecordInFile(vector<User> users);
+void RecordInFile(vector<User>& users);
 int FindAccount(vector<User>& users, char username[Max_Length], char password[Max_Length]);
 void SecondMenu(int numberOfUser, vector<User>& users);
 void Processing(vector<User>& users);
-vector<User> ReadFromFile();
+void ReadFromFile(vector<User>& users);
 long long HashPassword(char password[Max_Length]);
 int main()
 {
-	vector<User> users = ReadFromFile();
+	vector<User> users;
+	ReadFromFile(users);
 	Processing(users);
 
 }
@@ -79,7 +80,8 @@ void Processing(vector<User>& users)
 		char username[Max_Length];
 		char password[Max_Length];
 		cout << "Enter Name: "; cin >> username;
-		while (!isUsernameValid(username))
+		while (!
+			isUsernameValid(username))
 		{
 			cout << "Username cannot contain digits!";
 			cout << "Enter Name: "; cin >> username;
@@ -87,14 +89,16 @@ void Processing(vector<User>& users)
 		cout << endl;
 		cout << "Enter Password:  "; cin >> password;
 		cout << endl;
-		while (!isValidPassword(password))
+		while (!
+			isValidPassword(password))
 		{
 			cout << "Invalid Password!" << endl;
 			cout << "Enter Password:  "; cin >> password;
 		}
 		char passwordToConfirm[20];
 		cout << "Confirm Password: "; cin >> passwordToConfirm;
-		while (!AreEqualCharArrays(password, passwordToConfirm))
+		while (!
+			AreEqualCharArrays(password, passwordToConfirm))
 		{
 			cout << "Wrong password!" << endl;
 			cout << "Confirm Password: "; cin >> passwordToConfirm;
@@ -206,10 +210,8 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 
 
 }
-vector<User> ReadFromFile()
+void  ReadFromFile(vector<User>& users)
 {
-	vector<User> users;
-
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
 	ifstream File(filename);
@@ -259,21 +261,17 @@ vector<User> ReadFromFile()
 		user.password = hashedPassword;
 		double numberBalance = atof(stringBalance.c_str());
 		user.balance = numberBalance;
-		//cout << username << endl;
-		//cout << password<<endl;
-		//cout << numberBalance<<endl;
-		//cout << userLine << endl;
-		//cout << endl;
+	
 		users.push_back(user);
 
 	}
 
 	File.close();
-	return users;
+
 
 
 }
-void RecordInFile(vector<User> users)
+void RecordInFile(vector<User>& users)
 {
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 

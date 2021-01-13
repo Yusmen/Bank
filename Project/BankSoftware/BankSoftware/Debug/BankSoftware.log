@@ -1,3 +1,3 @@
 ﻿  BankSoftware.cpp
-C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(257,28): warning C4244: 'initializing': conversion from 'double' to '__int64', possible loss of data
+C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\BankSoftware\BankSoftware.cpp(256,28): warning C4244: 'initializing': conversion from 'double' to '__int64', possible loss of data
   BankSoftware.vcxproj -> C:\Users\Yusmen\Desktop\УП\SimpleBankSoftware\Bank\Project\BankSoftware\Debug\BankSoftware.exe
