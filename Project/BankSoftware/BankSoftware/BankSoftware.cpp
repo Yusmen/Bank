@@ -44,7 +44,6 @@ int main()
 	vector<User> users;
 	ReadFromFile(users);
 	Processing(users);
-
 }
 void Processing(vector<User>& users)
 {
@@ -72,8 +71,6 @@ void Processing(vector<User>& users)
 		}
 
 		SecondMenu(index, users);
-
-
 	}
 	else if (option == 'R')
 	{
