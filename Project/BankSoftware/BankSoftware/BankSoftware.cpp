@@ -209,7 +209,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 }
 void ReadFromFile(vector<User>& users)
 {
-	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
+	char filename[150] = "users.txt";
 
 	ifstream File(filename);
 	if (!File.is_open())
