@@ -161,7 +161,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 	}
 	else if (option == "T")
 	{
-		
+
 		char usernameToTransfer[Max_Length];
 		char password[Max_Length];
 		double amount;
@@ -207,7 +207,7 @@ void SecondMenu(int numberOfUser, vector<User>& users)
 
 
 }
-void  ReadFromFile(vector<User>& users)
+void ReadFromFile(vector<User>& users)
 {
 	char filename[150] = "C:/Users/Yusmen/Desktop/users.txt";
 
@@ -258,7 +258,7 @@ void  ReadFromFile(vector<User>& users)
 		user.password = hashedPassword;
 		double numberBalance = atof(stringBalance.c_str());
 		user.balance = numberBalance;
-	
+
 		users.push_back(user);
 
 	}
@@ -351,7 +351,7 @@ bool isValidPassword(char password[Max_Length])
 	}
 	for (int i = 0; i < (int)strlen(password); i++)
 	{
-		
+
 		if (password[i] == '!' || password[i] == '@' ||
 			password[i] == '#' || password[i] == '$' || password[i] == '%' ||
 			password[i] == '^' || password[i] == '&' || password[i] == '*')
@@ -390,7 +390,7 @@ void Copy(char firstArr[Max_Length], char secondArr[Max_Length])
 }
 int FindAccount(vector<User>& users, char username[Max_Length], char password[Max_Length])
 {
-	for (int i = 0; i < (int)size(users); i++)
+	for (int i = 0; i < users.size(); i++)
 	{
 		if (AreEqualCharArrays(users[i].username, username)
 			&& (users[i].password == HashPassword(password)))
